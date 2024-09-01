@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Breathing Circle</title>
+  <style>
+    body {
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+    #circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #f0f0f0;
+      margin-top: 50px;
+      margin-bottom: 100px;
+      transform: scale(0.1);
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 200px;
+      height: 2px;
+      background-color: white;
+      outline: none;
+      margin-top: 10px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: black;
+      border: 2px solid white;
+      cursor: pointer;
+    }
+    .slider-value {
+      margin-top: 5px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div id="circle"></div>
+  <div class="input-container">
+    <input type="range" id="inhale" min="1" max="10" value="4" step="1">
+    <div class="slider-value" id="inhaleValue">4</div>
+  </div>
+  <div class="input-container">
+    <input type="range" id="holdAfterInhale" min="0" max="10" value="2" step="1">
+    <div class="slider-value" id="holdAfterInhaleValue">2</div>
+  </div>
+  <div class="input-container">
+    <input type="range" id="exhale" min="1" max="10" value="4" step="1">
+    <div class="slider-value" id="exhaleValue">4</div>
+  </div>
+  <div class="input-container">
+    <input type="range" id="holdAfterExhale" min="0" max="10" value="2" step="1">
+    <div class="slider-value" id="holdAfterExhaleValue">2</div>
+  </div>
+
+  <script>
+    const circle = document.getElementById('circle');
+    const inhaleSlider = document.getElementById('inhale');
+    const holdAfterInhaleSlider = document.getElementById('holdAfterInhale');
+    const exhaleSlider = document.getElementById('exhale');
+    const holdAfterExhaleSlider = document.getElementById('holdAfterExhale');
+    const inhaleValue = document.getElementById('inhaleValue');
+    const holdAfterInhaleValue = document.getElementById('holdAfterInhaleValue');
+    const exhaleValue = document.getElementById('exhaleValue');
+    const holdAfterExhaleValue = document.getElementById('holdAfterExhaleValue');
+
+    function updateSliderValue(slider, valueElement) {
+      valueElement.textContent = slider.value;
+    }
+
+    inhaleSlider.addEventListener('input', () => updateSliderValue(inhaleSlider, inhaleValue));
+    holdAfterInhaleSlider.addEventListener('input', () => updateSliderValue(holdAfterInhaleSlider, holdAfterInhaleValue));
+    exhaleSlider.addEventListener('input', () => updateSliderValue(exhaleSlider, exhaleValue));
+    holdAfterExhaleSlider.addEventListener('input', () => updateSliderValue(holdAfterExhaleSlider, holdAfterExhaleValue));
+
+    function breathe() {
+      const inhale = parseInt(inhaleSlider.value);
+      const holdAfterInhale = parseInt(holdAfterInhaleSlider.value);
+      const exhale = parseInt(exhaleSlider.value);
+      const holdAfterExhale = parseInt(holdAfterExhaleSlider.value);
+
+      circle.style.transition = `transform ${inhale}s ease-in-out`;
+      circle.style.transform = 'scale(1)';
+
+      setTimeout(() => {
+        setTimeout(() => {
+          circle.style.transition = `transform ${exhale}s ease-in-out`;
+          circle.style.transform = 'scale(0.1)';
+          setTimeout(breathe, (exhale + holdAfterExhale) * 1000);
+        }, holdAfterInhale * 1000);
+      }, inhale * 1000);
+    }
+
+    breathe();
+  </script>
+</body>
+</html>
