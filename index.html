@@ -2,6 +2,8 @@
 <html>
 <head>
   <title>Breathing Circle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
   <style>
     body {
       background-color: black;
@@ -73,6 +75,18 @@
   </div>
 
   <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('Service Worker registered:', registration);
+          })
+          .catch(error => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+
     const circle = document.getElementById('circle');
     const inhaleSlider = document.getElementById('inhale');
     const holdAfterInhaleSlider = document.getElementById('holdAfterInhale');
